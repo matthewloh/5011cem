@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { headers } from "next/headers";
-import { createClient } from "@/utils/supabase/server";
+import { useSupabaseServer } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { SubmitButton } from "./submit-button";
 
@@ -14,7 +14,7 @@ export default function Login({
 
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-    const supabase = createClient();
+    const supabase = useSupabaseServer();
 
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -25,7 +25,7 @@ export default function Login({
       return redirect("/login?message=Could not authenticate user");
     }
 
-    return redirect("/protected");
+    return redirect("/");
   };
 
   const signUp = async (formData: FormData) => {
@@ -34,7 +34,7 @@ export default function Login({
     const origin = headers().get("origin");
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-    const supabase = createClient();
+    const supabase = useSupabaseServer();
 
     const { error } = await supabase.auth.signUp({
       email,
